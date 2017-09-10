@@ -21,7 +21,8 @@
   </div>
 
   <div fxFlex *ngIf="selectedDish">
-    <md-card>
+    <!--
+	<md-card>
       <md-card-header>
         <md-card-title>
           <h3>{{selectedDish.name | uppercase}}</h3>
@@ -37,5 +38,8 @@
         <button md-button>SHARE</button>
       </md-card-actions>
     </md-card>
+	-->
+	
+	<app-dishdetail></app-dishdetail>
   </div>
 </div>
