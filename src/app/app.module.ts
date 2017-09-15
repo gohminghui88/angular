@@ -24,6 +24,8 @@ import { ContactComponent } from './contact/contact.component';
 
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { LoginComponent } from './login/login.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 //import:import { FormsModule } from '@angular/forms'; 
 
@@ -46,7 +48,8 @@ import { LoginComponent } from './login/login.component';
     HttpModule,
     MaterialModule,
     FlexLayoutModule, 
-	AppRoutingModule
+	AppRoutingModule, 
+	ReactiveFormsModule
 	
   ],
   entryComponents: [
