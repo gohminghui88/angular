@@ -1,4 +1,4 @@
-
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { Component, OnInit, Inject } from '@angular/core';
 import { Dish } from '../shared/dish';
