@@ -33,7 +33,7 @@
 
   <div fxFlex="40" *ngIf="dish">
     <h1>Comments</h1>
-	<md-list>
+	<md-list *ngIf="dish.comments">
       <md-list-item *ngFor="let c of dish.comments">
         
           <p md-line>{{c.comment}}</p>
