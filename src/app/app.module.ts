@@ -6,13 +6,14 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '@angular/material'; 
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import 'hammerjs';
 import { MenuComponent } from './menu/menu.component';
 import { DishdetailComponent } from './dishdetail/dishdetail.component';
 
+import { ProcessHttpmsgService } from './services/process-httpmsg.service';
 import { LeaderService } from './services/leader.service';
 import { PromotionService } from './services/promotion.service';
 import { DishService } from './services/dish.service';
@@ -24,7 +25,8 @@ import { ContactComponent } from './contact/contact.component';
 
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { LoginComponent } from './login/login.component';
-import { ReactiveFormsModule } from '@angular/forms';
+//import { ReactiveFormsModule } from '@angular/forms';
+import { baseURL } from './shared/baseurl';
 
 
 //import:import { FormsModule } from '@angular/forms'; 
@@ -55,7 +57,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   entryComponents: [
         LoginComponent
   ],
-  providers: [DishService, PromotionService, LeaderService],
+  providers: [DishService, PromotionService, LeaderService, ProcessHttpmsgService, {provide: 'BaseURL', useValue: baseURL}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+
+
+import { Component, OnInit, Inject } from '@angular/core';
 import { Dish } from '../shared/dish';
 
 import { DishService } from '../services/dish.service';
@@ -8,21 +10,38 @@ import { Location } from '@angular/common';
 
 import 'rxjs/add/operator/switchMap';
 
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {MdInputModule} from '@angular/material';
+
+import { Comment } from '../shared/comment';
+
 @Component({
   selector: 'app-dishdetail',
   templateUrl: './dishdetail.component.html',
   styleUrls: ['./dishdetail.component.css']
 })
+
+
 export class DishdetailComponent implements OnInit {
 
+	formsValue: any;
+	commentForm: FormGroup;
+	comment: Comment;
 	dish: Dish;
 	dishIds: number[];
 	prev: number;
 	next: number;
+	dateObj: any; 
+	
+	
 
   constructor(private dishservice: DishService,
     private route: ActivatedRoute,
-    private location: Location) { }
+    private location: Location, private fb: FormBuilder, @Inject('BaseURL') private BaseURL) { 
+	
+		this.createForm();
+		
+	}
 
   ngOnInit() {
     //let id = +this.route.snapshot.params['id'];
@@ -31,6 +50,8 @@ export class DishdetailComponent implements OnInit {
     this.route.params
       .switchMap((params: Params) => this.dishservice.getDish(+params['id']))
       .subscribe(dish => { this.dish = dish; this.setPrevNext(dish.id); });
+	
+	
   }
   
   setPrevNext(dishId: number) {
@@ -41,6 +62,70 @@ export class DishdetailComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+  }
+  
+  
+  
+  createForm() {
+    this.commentForm = this.fb.group({
+      author: ['', Validators.compose([Validators.required, Validators.minLength(2)])],
+	  date: '', 
+	  rating: [5, Validators.compose([Validators.required])],
+	  comment: ['', Validators.compose([Validators.required, Validators.minLength(2)])]
+    });
+	
+	this.commentForm.valueChanges.subscribe(data => this.onValueChanged(data));
+	this.onValueChanged();
+  }
+
+  onSubmit(data: any) {
+	  
+	  //this.route.params
+	//	.switchMap((params: Params) => this.temp = +params['id'])
+	//	.subscribe(commentForm => {this.submittedForm = formsValue;})
+	
+	data.value.date = new Date().toISOString();
+	
+	this.dish.comments.push(data.value);
+	
+	console.log(data.value);	
+	
+    this.commentForm.reset();
+  }
+  
+  formErrors = {
+	  'author': '', 
+	  'comment': ''
+  }
+  
+  validationMessages = {
+	  'author': {
+		  'required': 'author name cannot be empty', 
+		  'minlength': 'author name must be at least 2 characters'
+	  }, 
+	  
+	  'comment': {
+		  'required': 'comment cannot be empty', 
+		  'minlength': 'comment must be at least 2 characters'
+	  }
+  }
+  
+  onValueChanged(data?: any) {
+	  if(!this.commentForm) {return ;}
+	  const form = this.commentForm;
+	  
+	  for(const field in this.formErrors) {
+		  this.formErrors[field] = '';
+		  const control = form.get(field);
+		  
+		  if(control && control.dirty && !control.valid) {
+			  const messages = this.validationMessages[field];
+			  
+			  for(const key in control.errors) {
+				  this.formErrors[field] += messages[key] + ' ';
+			  }
+		  }
+	  }
   }
 
 }
