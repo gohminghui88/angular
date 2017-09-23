@@ -28,6 +28,10 @@ import { LoginComponent } from './login/login.component';
 //import { ReactiveFormsModule } from '@angular/forms';
 import { baseURL } from './shared/baseurl';
 
+import { RestangularModule, Restangular } from 'ngx-restangular';
+import { RestangularConfigFactory } from './shared/restConfig';
+
+
 
 //import:import { FormsModule } from '@angular/forms'; 
 
@@ -51,13 +55,15 @@ import { baseURL } from './shared/baseurl';
     MaterialModule,
     FlexLayoutModule, 
 	AppRoutingModule, 
-	ReactiveFormsModule
+	ReactiveFormsModule, 
+	RestangularModule.forRoot(RestangularConfigFactory)
 	
   ],
   entryComponents: [
         LoginComponent
   ],
-  providers: [DishService, PromotionService, LeaderService, ProcessHttpmsgService, {provide: 'BaseURL', useValue: baseURL}],
+  providers: [DishService, PromotionService, LeaderService, ProcessHttpmsgService, 
+  {provide: 'BaseURL', useValue: baseURL}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
