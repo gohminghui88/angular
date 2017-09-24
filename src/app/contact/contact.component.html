@@ -40,7 +40,7 @@
         <h3>Send us your Feedback</h3>
         <p>{{ feedbackForm.value | json }} {{ feedbackForm.status | json }}</p>
 
-        <form novalidate [formGroup]="feedbackForm" (ngSubmit)="onSubmit()">
+        <form novalidate [formGroup]="feedbackForm" (ngSubmit)="onSubmit()" [hidden]="!showform" [@expand]>
           <p>
             <md-input-container class="half-width"
              dividerColor="{{(formErrors.firstname) ? 'warn' : 'primary'}}">
@@ -96,5 +96,26 @@
           </p>
           <button type="submit" md-button class="background-primary text-floral-white" [disabled]="feedbackForm.invalid">Submit</button>
         </form>
+		<div [hidden]="showform || returnFeedback" [@expand]>
+			<md-spinner></md-spinner><h4>Loading . . . Please Wait</h4>
+		</div>
+		<div [hidden]="!returnFeedback" [@expand]>
+                <h4>Your Submission</h4>
+				   <p *ngIf="returnFeedback">
+		              First Name: {{ returnFeedback.firstname }} <br />
+					  Last Name: {{ returnFeedback.lastname }} <br />
+					  Tel Num: {{ returnFeedback.telnum }} <br />
+					  Email: {{ returnFeedback.email }} <br />
+					  Contact You? {{ returnFeedback.agree }} <br />
+					  How? {{ returnFeedback.contact }} <br />
+					  Feedback: {{ returnFeedback.message }} <br />
+		           </p>
+               <p></p>
+                <div>
+                    <a md-raised-button href="tel:+85212345678"><i class="fa fa-phone"></i> Call</a>
+                    <a md-raised-button><i class="fa fa-skype"></i> Skype</a>
+                    <a md-raised-button href="mailto:confusion@food.net"><i class="fa fa-envelope-o"></i> Email</a>
+                </div>
+        </div>
       </div>
 </div>

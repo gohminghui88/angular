@@ -1,9 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Feedback, ContactType } from '../shared/feedback';
 
-import { flyInOut } from '../animations/app.animation';
+
+import { FeedbackService } from '../services/feedback.service';
+
+import { visibility } from '../animations/app.animation';
+import { flyInOut, expand } from '../animations/app.animation';
+
+
 
 @Component({
   selector: 'app-contact',
@@ -14,18 +20,23 @@ import { flyInOut } from '../animations/app.animation';
   'style': 'display: block;'
   },
   animations: [
-    flyInOut()
+     visibility(), 
+	flyInOut(), 
+	expand()
   ]
 })
 export class ContactComponent implements OnInit {
 
   feedbackForm: FormGroup;
   feedback: Feedback;
+  returnFeedback: Feedback;
   contactType = ContactType;
+  showform: string;
   
-  constructor(private fb: FormBuilder) { this.createForm(); }
+  constructor(private fb: FormBuilder, @Inject('BaseURL') private BaseURL, private feedbackService: FeedbackService) { this.createForm(); }
 
   ngOnInit() {
+	  this.showform = "yes";
   }
   
   formErrors = {
@@ -74,17 +85,32 @@ export class ContactComponent implements OnInit {
   }
 
   onSubmit() {
+	this.showform="";
     this.feedback = this.feedbackForm.value;
-    console.log(this.feedback);
-    this.feedbackForm.reset({
-      firstname: '',
-      lastname: '',
-      telnum: '',
-      email: '',
-      agree: false,
-      contacttype: 'None',
-      message: ''
-    });
+    this.returnFeedback = this.feedbackService.submitFeedback(this.feedback); //if use subscribe, I got to post and then get again....
+	//this.feedbackService.submitFeedback(this.feedback).subscribe(data => this.returnFeedback = data);
+	
+	console.log(this.returnFeedback);
+	
+	
+	setTimeout(()=>{    
+      this.returnFeedback = null;
+	  this.showform="yes";
+	  console.log("waited 5 seconds");
+	},5000);
+	
+	
+	this.feedbackForm.reset({
+			firstname: '',
+			lastname: '',
+			telnum: '',
+			email: '',
+			agree: false,
+			contacttype: 'None',
+			message: ''
+		});
+	
+    
   }
   
   onValueChanged(data?: any) {

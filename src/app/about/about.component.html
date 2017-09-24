@@ -60,7 +60,7 @@
 		  <md-list *ngIf="leaders" [@expand]>
 		  
 			<md-list-item *ngFor="let leader of leaders"> 
-				<img mdListAvatar src="{{leader.image}}" />
+				<img mdListAvatar src="{{BaseURL + leader.image}}" />
 				
 				<h5 mdLine >{{leader.name}} {{leader.abbr}}</h5>
 				
@@ -72,9 +72,15 @@
 			</md-list-item>
  
 		  </md-list>
-		  <div [hidden]="leaders">
+		  <div [hidden]="leaders || leaderErrMess">
 			<md-spinner></md-spinner><h4>Loading . . . Please Wait</h4>
 		  </div>
+		  
+		  <div *ngIf="leaderErrMess">
+    <h2>Error</h2>
+    <h4>{{leaderErrMess}}</h4>
+	</div>
+	
        </div>
 	   
 </div>
